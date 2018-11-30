@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_charged_amount"
+        android:title="@string/record_payment" />
+    <item android:id="@+id/menu_check_payment"
+        android:title="@string/check_payment" />
+</menu>

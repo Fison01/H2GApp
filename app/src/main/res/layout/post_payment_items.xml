@@ -1,0 +1,166 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="0dp">
+
+    <!-- A CardView that contains another views -->
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="55dp"
+            android:background="@color/common_google_signin_btn_text_dark_pressed">
+
+
+            <TextView
+                android:id="@+id/txt_payment_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="13dp"
+                android:gravity="center"
+                android:text="Contrubition March,2018"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="8sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_amount"
+                android:layout_width="91dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/colorPrimary"
+                android:shadowColor="@color/black"
+                android:text="1000000000"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="57dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="22dp"
+                android:text="Open On"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="33dp"
+                android:text="Closed On"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_payment_date"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="-147dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/txt_paid_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="92dp"
+                android:layout_marginTop="22dp"
+                android:text="X"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/txt_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="23dp"
+                android:text="12/05/2015"
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/txt_end_date"
+                android:layout_width="47dp"
+                android:layout_height="9dp"
+                android:layout_alignEnd="@+id/txt_amount"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="5dp"
+                android:text="12/05/2015"
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/txt_pid"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="46dp"
+                android:background="@color/colorPrimary"
+                android:text="12121212"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/txt_payment_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="56dp"
+                android:layout_marginTop="42dp"
+                android:text="25/2/2000"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/id_popup_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="84dp"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

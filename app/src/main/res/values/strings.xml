@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">H2GApp</string>
+    <string name="title_home">H2G Family</string>
+    <string name="title_members">Members</string>
+    <string name="title_Payment">Payments</string>
+    <string name="title_meeting">meeting</string>
+    <string name="title_account">Account</string>
+    <string name="title_add_menu">Add New</string>
+    <string name="title_logout_menu">Logout</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="member_fragment">H2G Members</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="meeting_fragment"> H2G Meetings</string>
+    <string name="payment_fragment">Members Payments</string>
+    <string name="account_fragment"> H2G Account manager</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="email">Email Id</string>
+    <string name="Role">Role(Member,Treasurer,Cordinator,...)</string>
+    <string name="login">LOGIN</string>
+    <string name="show_pwd">Show Password</string>
+    <string name="passowrd">Password</string>
+    <string name="hide_pwd">Hide Password</string>
+    <string name="forgot">Forgot password?</string>
+    <string name="closebutton">Close Button for Activity</string>
+    <string name="newUser">Not a Member yet? Sign Up here.</string>
+    <string name="lname">Last Name</string>
+    <string name="dob">Date of Birth</string>
+    <string name="fname">First Name</string>
+    <string name="radio_male">Male</string>
+    <string name="radio_female">Female</string>
+    <string name="radio_single">Single</string>
+    <string name="radio_married">Married</string>
+    <string name="radio_devorce">Devorce</string>
+    <string name="id">Id</string>
+    <string name="mobileNumber">Mobile Number</string>
+    <string name="h2gentrydate">H2G Entry Date</string>
+    <string name="rank">Rank</string>
+    <string name="deployment">Deployment</string>
+    <string name="job_location">Job Location</string>
+    <string name="address">Address(Kimironko under Pegina pacis)</string>
+    <string name="nid">Nation ID</string>
+    <string name="marriage_date">Date of Marriage</string>
+    <string name="married_with">Married with(full name)</string>
+    <string name="married_nbr">His/her married Phone Number</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="terms_conditions">After reading all the Terms and Conditions. i agree everything</string>
+    <string name="signUp">Save</string>
+    <string name="already_user">H2G Family Members Info.</string>
+    <string name="registered_emailid">Please enter your Registered Email Id below:</string>
+    <string name="submit">SUBMIT</string>
+    <string name="back">BACK</string>
+    <string name="title_activity_registration">Registration</string>
+    <string name="record_payment">New Charged Amount</string>
+    <string name="new_payment_needed">New Payment Needed</string>
+    <string name="payment_type_hint">Select Payment type</string>
+    <string name="payment_amount_hint">Amount paid</string>
+    <string name="payment_sdate_hint">Starting payment on... Date</string>
+    <string name="payment_edate_hint">Final payment on ... Date</string>
+    <string name="payment_comment_hint">Comment</string>
+    <string name="title_activity_login">Sign in</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+
+    </string>
+    <string name="preference_file_key">preference_file_key</string>
+    <string name="pref_login_user_email">login_user_email</string>
+    <string name="pref_login_user_role">login_user_role</string>
+    <string name="menu_amount_paid">Paid</string>
+    <string name="check_payment">Check Payment</string>
+</resources>
