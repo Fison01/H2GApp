@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.example.qtfison.h2gapp.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -56,5 +57,20 @@ public class UtilFunctions {
             e.printStackTrace();
             return null;
         }
+    }
+    public static boolean isValidDate(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        Date testDate = null;
+        try {
+            testDate = sdf.parse(date);
+        }catch (ParseException e){
+            return false;
+        }
+        if (!sdf.format(testDate).equals(date))
+        {
+            return false;
+        }
+        return true;
     }
 }

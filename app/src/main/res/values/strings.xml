@@ -61,8 +61,8 @@
     <string name="new_payment_needed">New Payment Needed</string>
     <string name="payment_type_hint">Select Payment type</string>
     <string name="payment_amount_hint">Amount paid</string>
-    <string name="payment_sdate_hint">Starting payment on... Date</string>
-    <string name="payment_edate_hint">Final payment on ... Date</string>
+    <string name="payment_sdate_hint">Opining Date 01/01/2018</string>
+    <string name="payment_edate_hint">Deadline 01/01/2018</string>
     <string name="payment_comment_hint">Comment</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->

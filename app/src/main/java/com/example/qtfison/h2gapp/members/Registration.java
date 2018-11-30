@@ -193,7 +193,7 @@ public class Registration extends AppCompatActivity {
             test= true;
         }
         NID = edtNID.getText().toString();
-        if (NID.length()==16) {
+        if (NID.length()!=16) {
             edtNID.setError("Please enter a valid NID only 16 Digits");
             Toast.makeText(getBaseContext(),"Please enter a valid NID only 16 Digits",Toast.LENGTH_SHORT).show();
             return false;

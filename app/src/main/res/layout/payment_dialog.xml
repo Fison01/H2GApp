@@ -6,25 +6,20 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/pay_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="2" />
-
     <EditText
         android:id="@+id/Pay_type"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_action_add"
+        android:drawableLeft="@drawable/ic_payment"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:hint="@string/payment_type_hint"
         android:inputType="textCapWords"
         android:padding="10dp"
         android:singleLine="true"
+        android:maxLength="25"
         android:textColor="@color/black"
         android:textColorHint="@color/button_selectorcolor"
         android:textSize="16sp" />
@@ -40,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_action_add"
+        android:drawableLeft="@drawable/ic_account"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:hint="@string/payment_amount_hint"
@@ -63,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_action_add"
+        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:hint="@string/payment_sdate_hint"
@@ -85,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_action_add"
+        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:hint="@string/payment_edate_hint"
@@ -95,11 +90,6 @@
         android:textColor="@color/black"
         android:textColorHint="@color/button_selectorcolor"
         android:textSize="16sp" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="@color/white_greyish" />
 
     <View
         android:layout_width="fill_parent"

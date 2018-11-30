@@ -285,7 +285,6 @@ public class MemberFragment extends Fragment {
     public void showChargeAmountDialog(final String email,final String fName){
         LayoutInflater li = LayoutInflater.from(getContext());
       final   View promptsView = li.inflate(R.layout.payment_dialog, null);
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(  getContext());
         alertDialogBuilder.setView(promptsView);
                alertDialogBuilder
@@ -295,7 +294,6 @@ public class MemberFragment extends Fragment {
                 .setPositiveButton("Save",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                TextView edtPId = (TextView) promptsView .findViewById(R.id.pay_id);
                                 EditText edtPayType = (EditText) promptsView .findViewById(R.id.Pay_type);
                                 EditText edtAmount = (EditText) promptsView .findViewById(R.id.edt_pay_amt);
                                 EditText edtStart = (EditText) promptsView .findViewById(R.id.pay_start_date);
@@ -308,7 +306,6 @@ public class MemberFragment extends Fragment {
                                 startDate = edtStart.getText().toString();
                                 endingDate = edtend.getText().toString();
                                 amount = Long.parseLong(edtAmount.getText().toString());
-
                                 PaymentNeeded paymentNeeded= new PaymentNeeded(paymentNeededId,paymentType,startDate,endingDate,amount);
                                 addNewPayment(paymentNeeded,email,fName);
                             }
@@ -329,7 +326,6 @@ public class MemberFragment extends Fragment {
         myDatabaseRef = database.getReference("payment_needed");
         myDatabaseRef.push().setValue(paymentNeeded);
         Toast.makeText(getContext(), "Amount charged to " + fName, Toast.LENGTH_SHORT).show();
-
         PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), email, 0, "Not yet");
         myDatabaseRef = database.getReference("payment_released");
         myDatabaseRef.push().setValue(paymentReleased);
