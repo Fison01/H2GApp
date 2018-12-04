@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getRandomColor;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isUserAllowed;
 
 
@@ -148,10 +149,7 @@ public class MemberFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-    public int getRandomColor(){
-        Random rnd = new Random();
-        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
         inflater.inflate(R.menu.menu_member, menu);
@@ -306,7 +304,7 @@ public class MemberFragment extends Fragment {
                                 startDate = edtStart.getText().toString();
                                 endingDate = edtend.getText().toString();
                                 amount = Long.parseLong(edtAmount.getText().toString());
-                                PaymentNeeded paymentNeeded= new PaymentNeeded(paymentNeededId,paymentType,startDate,endingDate,amount);
+                                PaymentNeeded paymentNeeded= new PaymentNeeded(paymentNeededId,paymentType,startDate,endingDate,amount,amount,1,0);
                                 addNewPayment(paymentNeeded,email,fName);
                             }
                         })
