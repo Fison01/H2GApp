@@ -3,7 +3,7 @@ package com.example.qtfison.h2gapp.members;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,16 +22,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.qtfison.h2gapp.MyProgressiveDialog;
 import com.example.qtfison.h2gapp.Payment.MemberPaymentActivity;
 import com.example.qtfison.h2gapp.Payment.PaymentNeeded;
 import com.example.qtfison.h2gapp.Payment.PaymentReleased;
 import com.example.qtfison.h2gapp.R;
+import com.example.qtfison.h2gapp.loans.LoanActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,43 +38,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Random;
 import java.util.UUID;
 
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getRandomColor;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isUserAllowed;
+import static com.example.qtfison.h2gapp.Configs.LOGINUSEREMAIL;
+import static com.example.qtfison.h2gapp.Configs.TREASURER;
+import static com.example.qtfison.h2gapp.Configs.USERLOGINROLE;
 
 
 public class MemberFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+  //  MyProgressiveDialog progress;
     private String mParam1;
     private String mParam2;
-
+    TextView txtUser,txtRole,tvTotMembers;
     RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseRecyclerOptions<Member> options;
-    Member selectedPost;
-    String selectedKey;
-
     FirebaseRecyclerAdapter<Member,MemberRecycleViewHolder> adapter;
     public MemberFragment() {
-        // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MemberFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MemberFragment newInstance(String param1, String param2) {
         MemberFragment fragment = new MemberFragment();
         Bundle args = new Bundle();
@@ -92,21 +78,28 @@ public class MemberFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-
         }
+
     }
 @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
        View view=inflater.inflate(R.layout.fragment_member, container, false);
+ //   progress=new MyProgressiveDialog(getActivity());
         recyclerView=view.findViewById(R.id.recycleView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        tvTotMembers=view.findViewById(R.id.tvTotMember);
         if (database == null) {
             database = FirebaseDatabase.getInstance();
             myRef = database.getReference("members");
         }
+    txtUser=view.findViewById(R.id.txt_user);
+    txtRole=view.findViewById(R.id.txt_role);
+    if(LOGINUSEREMAIL!=null)
+        txtUser.setText(LOGINUSEREMAIL.split("@")[0]);
+        txtRole.setText(USERLOGINROLE);
+
         displayComment();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,14 +112,33 @@ public class MemberFragment extends Fragment {
 
             }
         });
+
+    FirebaseDatabase.getInstance().getReference("members").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            tvTotMembers.setText("@"+dataSnapshot.getChildrenCount()+" Members");
+            return;
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    });
+
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
     }
 
     @Override
@@ -149,32 +161,8 @@ public class MemberFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_member, menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.new_member:
-                if(isUserAllowed(getActivity(),"Cordinator","Secretary")) {
-                    Intent intent = new Intent(getContext(), Registration.class);
-                    startActivity(intent);
-                    return true;
-                }else{
-                    Toast.makeText(getContext(),"Contact Cordinator Or Secretary",Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            case R.id.logout:
-                    //signOut();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     private void displayComment() {
+      //  progress.showPregress();
         options=new FirebaseRecyclerOptions.Builder<Member>()
                 .setQuery(myRef,Member.class)
                 .build();
@@ -185,49 +173,72 @@ public class MemberFragment extends Fragment {
                         holder.txt_lname.setText(model.getlName());
                         holder.txt_address.setText(model.getAddress());
                         holder.txt_phone.setText(model.getPhone());
-                        TextDrawable drawable = TextDrawable.builder() .buildRound(""+model.getfName().charAt(0), getRandomColor());
+                        TextDrawable drawable = TextDrawable.builder() .buildRound(""+model.getfName().charAt(0),getRandomColor() );
                         holder.img_Id.setImageDrawable(drawable);
-                        FirebaseDatabase database;
-                        DatabaseReference myDatabaseRef;
-                        database = FirebaseDatabase.getInstance();
-                        myDatabaseRef = database.getReference("payment_released");
-                        myDatabaseRef.orderByChild("email").equalTo(model.getEmail())
-                                .addChildEventListener(new ChildEventListener() {
-                                                            int count_issues=0;
-                                                           @Override
-                                                           public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                                               if(!dataSnapshot.child("isPaid").getValue().toString().equalsIgnoreCase("1")) {
-                                                                   count_issues++;
-                                                                   TextDrawable drawableIssues = TextDrawable.builder().buildRound("" + count_issues, Color.RED);
-                                                                   holder.img_issues.setImageDrawable(drawableIssues);
-                                                               }
-                                                           }
+                        FirebaseDatabase.getInstance().getReference("payment_released").orderByChild("email").equalTo(model.getEmail()).addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                               if( !dataSnapshot.child("isPaid").getValue().toString().equalsIgnoreCase("1")){
+                                   holder.txt_star1.setVisibility(View.VISIBLE);
+                                   holder.txt_star2.setVisibility(View.VISIBLE);
+                                   return;
+                                }
+                            }
 
-                                                           @Override
-                                                           public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                                           }
+                            }
 
-                                                           @Override
-                                                           public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                                                           }
+                            }
 
-                                                           @Override
-                                                           public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                                                           }
+                            }
 
-                                                           @Override
-                                                           public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                           }
-                                                       });
+                            }
+                        });
+                        FirebaseDatabase.getInstance().getReference("loans").orderByChild("myEmail").equalTo(model.getEmail()).addChildEventListener(new ChildEventListener() {
+                            int a=0;
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                if(!dataSnapshot.child("isFullpaid").getValue().toString().equalsIgnoreCase("1")){
+                                    a =a+1;
+                                   // holder.img_issues2.setImageDrawable(TextDrawable.builder().buildRound(""+a, Color.RED));
+                                }
+                            }
 
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                         holder.txt_fname.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getContext(),"clicked on "+model.getfName(),Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(),"clicked on "+model.getfName(),Toast.LENGTH_SHORT).show();
                             }
                         });
                         holder.img_menu_popup.setOnClickListener(new View.OnClickListener() {
@@ -239,10 +250,9 @@ public class MemberFragment extends Fragment {
                                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                                     @Override
                                     public boolean onMenuItemClick(MenuItem item) {
-                                        //do your things in each of the following cases
                                         switch (item.getItemId()) {
                                             case R.id.menu_charged_amount:
-                                                if(isUserAllowed(getContext(),"Treasurer")) {
+                                                if(isUserAllowed(TREASURER,getContext())) {
                                                     showChargeAmountDialog(model.getEmail(),model.getfName());
                                                     return true;
                                                 }else{
@@ -250,11 +260,12 @@ public class MemberFragment extends Fragment {
                                                     return true;
                                                 }
                                             case R.id.menu_check_payment:
-                                                Intent intent=new Intent(getContext(),MemberPaymentActivity.class);
-                                                intent.putExtra("email",model.getEmail());
-                                                intent.putExtra("fname",model.getfName());
-                                                startActivity(intent);
-                                            //  return true;
+                                                startActivity1(MemberPaymentActivity.class,model);
+                                                return true;
+                                            case R.id.menu_check_loan:
+                                                //startActivity1(LoanActivity.class,model);
+                                                Toast.makeText(getContext(),"Under Developement",Toast.LENGTH_SHORT).show();
+                                                return true;
                                             default:
                                                 return false;
                                         }
@@ -263,8 +274,9 @@ public class MemberFragment extends Fragment {
                                 popup.show();
                             }
                         });
-                    }
 
+                       // progress.hideprogress();
+                    }
                     @NonNull
                     @Override
                     public MemberRecycleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -275,10 +287,24 @@ public class MemberFragment extends Fragment {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(getActivity() != null){
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+          //  progress.hideprogress();
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        if(getActivity() != null){
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         adapter.notifyDataSetChanged();
+
     }
     public void showChargeAmountDialog(final String email,final String fName){
         LayoutInflater li = LayoutInflater.from(getContext());
@@ -292,20 +318,40 @@ public class MemberFragment extends Fragment {
                 .setPositiveButton("Save",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                EditText edtPayType = (EditText) promptsView .findViewById(R.id.Pay_type);
-                                EditText edtAmount = (EditText) promptsView .findViewById(R.id.edt_pay_amt);
-                                EditText edtStart = (EditText) promptsView .findViewById(R.id.pay_start_date);
-                                EditText edtend = (EditText) promptsView .findViewById(R.id.pay_end_date);
+                                EditText edtPayType =  promptsView .findViewById(R.id.Pay_type);
+                                EditText edtAmount = promptsView .findViewById(R.id.edt_pay_amt);
+                                EditText edtStart = promptsView .findViewById(R.id.pay_start_date);
+                                EditText edtend =  promptsView .findViewById(R.id.pay_end_date);
                                 final String paymentNeededId;
                                 final String paymentType,startDate,endingDate;
                                 final long amount;
                                 paymentNeededId = getUniqueId();
-                                paymentType = edtPayType.getText().toString();
+
+                                if(edtPayType.getText().length()>0 && edtPayType.getText().length()<25) {
+                                    paymentType = edtPayType.getText().toString();
+                                }else{
+                                   Toast.makeText(getContext(),"Payment Type required(max 25 chars)",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                if(edtStart.getText().length()==0){
+                                    Toast.makeText(getContext(),"Starting date required",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 startDate = edtStart.getText().toString();
+                                if(edtend.getText().length()==0){
+                                    Toast.makeText(getContext(),"Deadline date required",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 endingDate = edtend.getText().toString();
-                                amount = Long.parseLong(edtAmount.getText().toString());
-                                PaymentNeeded paymentNeeded= new PaymentNeeded(paymentNeededId,paymentType,startDate,endingDate,amount,amount,1,0);
-                                addNewPayment(paymentNeeded,email,fName);
+                                try {
+                                    amount = Long.parseLong(edtAmount.getText().toString());
+                                    PaymentNeeded paymentNeeded= new PaymentNeeded(paymentNeededId,paymentType,startDate,endingDate,amount,amount,1,0);
+                                    addNewPayment(paymentNeeded,email,fName);
+                                }catch (Exception e){
+                                    Toast.makeText(getContext(),"Invalid Amount",Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         })
                 .setNegativeButton("Cancel",
@@ -318,6 +364,8 @@ public class MemberFragment extends Fragment {
         alertDialog.show();
     }
     public void addNewPayment(final PaymentNeeded paymentNeeded,String email,String fName) {
+
+     //   progress.showPregress();
         FirebaseDatabase database;
         DatabaseReference myDatabaseRef, ref;
         database = FirebaseDatabase.getInstance();
@@ -327,8 +375,18 @@ public class MemberFragment extends Fragment {
         PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), email, 0, "Not yet");
         myDatabaseRef = database.getReference("payment_released");
         myDatabaseRef.push().setValue(paymentReleased);
+        //increaseIssues(email,"members","paymentIssues");
+      //  progress.hideprogress();
     }
     public String getUniqueId() {
         return  UUID.randomUUID().toString().replace("-", "");
     }
+    public void startActivity1(Class c,Member model){
+        Intent i=new Intent(getContext(),c);
+        i.putExtra("email",model.getEmail());
+        i.putExtra("fname",model.getfName());
+        i.putExtra("loanId","0");
+        startActivity(i);
+    }
+
 }

@@ -18,7 +18,7 @@ public class PaymentRecyclerViewHolder extends RecyclerView.ViewHolder {
     }
     public PaymentRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
-        txt_Amount=(TextView) itemView.findViewById(R.id.txt_amount);
+        txt_Amount=(TextView) itemView.findViewById(R.id.txt_expense);
         txt_paymentType=(TextView) itemView.findViewById(R.id.txt_payment_type);
         txt_start_date=(TextView)itemView.findViewById(R.id.txt_start_date);
         txt_end_date=(TextView) itemView.findViewById(R.id.txt_end_date);

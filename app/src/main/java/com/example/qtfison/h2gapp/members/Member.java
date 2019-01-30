@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class Member {
     private String fName, lName, gender, status, email, phone;
-   private String address,rank, deployment, jobLocation,nID,marriedWith,marriedPhone,role;
-   private String entryDate,marriageDate,DOB;
+    private String address,rank, deployment, jobLocation,marriedWith,marriedPhone,role;
+    private String entryDate,dob;
     public Member() {
     }
-    public Member(String fName, String lName, String gender,  String status, String email, String phone, String address, String rank, String deployment, String jobLocation, String nID, String marriedWith, String marriedPhone, String role, String entryDate, String marriageDate,String DOB) {
 
+    public Member(String fName,String lName, String gender, String status, String email, String phone, String address, String rank, String deployment, String jobLocation, String marriedWith, String marriedPhone, String role,  String entryDate,  String dob) {
         this.fName = fName;
         this.lName = lName;
         this.gender = gender;
@@ -20,15 +20,12 @@ public class Member {
         this.rank = rank;
         this.deployment = deployment;
         this.jobLocation = jobLocation;
-        this.nID = nID;
         this.marriedWith = marriedWith;
         this.marriedPhone = marriedPhone;
-        this.role =role;
+        this.role = role;
         this.entryDate = entryDate;
-        this.marriageDate = marriageDate;
-        this.DOB=DOB;
+        this.dob = dob;
     }
-
 
     public String getfName() {
         return fName;
@@ -54,7 +51,7 @@ public class Member {
         this.gender = gender;
     }
 
-      public String getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -110,14 +107,6 @@ public class Member {
         this.jobLocation = jobLocation;
     }
 
-    public String getnID() {
-        return nID;
-    }
-
-    public void setnID(String nID) {
-        this.nID = nID;
-    }
-
     public String getMarriedWith() {
         return marriedWith;
     }
@@ -142,7 +131,7 @@ public class Member {
         this.role = role;
     }
 
-    public String getEntryDate() {
+   public String getEntryDate() {
         return entryDate;
     }
 
@@ -150,19 +139,12 @@ public class Member {
         this.entryDate = entryDate;
     }
 
-    public String getMarriageDate() {
-        return marriageDate;
+
+    public String getDob() {
+        return dob;
     }
 
-    public void setMarriageDate(String marriageDate) {
-        this.marriageDate = marriageDate;
-    }
-
-    public String getDOB() {
-        return DOB;
-    }
-
-    public void setDOB(String DOB) {
-        this.DOB = DOB;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 }

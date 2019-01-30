@@ -34,18 +34,13 @@
                 android:textStyle="bold" />
         </android.support.v7.widget.CardView>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <EditText
             android:id="@+id/fname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@mipmap/ic_launcher"
+            android:drawableLeft="@drawable/ic_action_user"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:hint="@string/fname"
@@ -55,21 +50,15 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
-            android:textSize="16sp"
-            tools:drawableLeft="@mipmap/ic_launcher" />
+            android:textSize="16sp" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <EditText
             android:id="@+id/lname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@android:drawable/ic_input_add"
+            android:drawableLeft="@drawable/ic_action_user"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:hint="@string/lname"
@@ -80,10 +69,6 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <RadioGroup
             android:id="@+id/radioSex"
@@ -104,22 +89,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/radio_female" />
         </RadioGroup>
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/black" />
 
         <EditText
             android:id="@+id/DOB"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/ic_menu_month"
             android:drawablePadding="8dp"
             android:focusable="auto"
@@ -130,12 +106,7 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
-            android:textSize="16sp"
-            tools:drawableLeft="@android:drawable/ic_menu_my_calendar" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
+            android:textSize="16sp" />
         <RadioGroup
             android:id="@+id/radioStatus"
             android:layout_width="wrap_content"
@@ -166,9 +137,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/sym_action_email"
             android:drawablePadding="8dp"
+            android:enabled="false"
             android:gravity="center_vertical"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
@@ -178,17 +149,12 @@
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <EditText
             android:id="@+id/mobileNumber"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@drawable/ic_action_add"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -198,19 +164,13 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
-            android:textSize="16sp"
-            tools:drawableLeft="@android:drawable/stat_sys_phone_call_forward" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/ic_menu_myplaces"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -222,39 +182,12 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
-
-        <EditText
-            android:id="@+id/nid"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@android:drawable/stat_notify_sdcard"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:hint="@string/nid"
-            android:inputType="numberDecimal"
-            android:maxLength="17"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/hints_color"
-            android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/black" />
 
         <EditText
             android:id="@+id/rank"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/btn_star"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -266,17 +199,12 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <EditText
             android:id="@+id/deployment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/ic_dialog_map"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -287,17 +215,13 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
+
 
         <EditText
             android:id="@+id/job_location"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/ic_menu_myplaces"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -308,10 +232,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
+
 
         <EditText
             android:id="@+id/h2gentrydate"
@@ -329,16 +250,12 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/black" />
+
         <EditText
             android:id="@+id/married_with"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@drawable/ic_action_add"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -349,17 +266,12 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <EditText
             android:id="@+id/married_nbr"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
             android:drawableLeft="@android:drawable/stat_sys_phone_call_forward"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
@@ -370,54 +282,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/hints_color"
             android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
-        <EditText
-            android:id="@+id/marriage_date"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:hint="@string/marriage_date"
-            android:inputType="textCapWords"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/hints_color"
-            android:textSize="16sp" />
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/black" />
-
-
-        <EditText
-            android:id="@+id/edtRole"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/transparent"
-            android:drawableLeft="@android:drawable/ic_input_get"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:hint="@string/Role"
-            android:inputType="textCapWords"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textColorHint="@color/hints_color"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/white_greyish" />
 
         <CheckBox
             android:id="@+id/terms_conditions"

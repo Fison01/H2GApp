@@ -3,9 +3,9 @@
     <string name="title_home">H2G Family</string>
     <string name="title_members">Members</string>
     <string name="title_Payment">Payments</string>
-    <string name="title_meeting">meeting</string>
+    <string name="title_meeting">Expenses</string>
     <string name="title_account">Account</string>
-    <string name="title_add_menu">Add New</string>
+    <string name="title_add_menu">Add a member</string>
     <string name="title_logout_menu">Logout</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="member_fragment">H2G Members</string>
@@ -58,7 +58,7 @@
     <string name="back">BACK</string>
     <string name="title_activity_registration">Registration</string>
     <string name="record_payment">New Charged Amount</string>
-    <string name="new_payment_needed">New Payment Needed</string>
+    <string name="new_payment_needed">New Payment</string>
     <string name="payment_type_hint">Select Payment type</string>
     <string name="payment_amount_hint">Amount paid</string>
     <string name="payment_sdate_hint">Opining Date 01/01/2018</string>
@@ -78,9 +78,34 @@
         completions."
 
     </string>
-    <string name="preference_file_key">preference_file_key</string>
+
     <string name="pref_login_user_email">login_user_email</string>
-    <string name="pref_login_user_role">login_user_role</string>
-    <string name="menu_amount_paid">Paid</string>
-    <string name="check_payment">Check Payment</string>
+    <string name="menu_disable">Disable</string>
+    <string name="menu_amount_paid">Paid(approved)</string>
+    <string name="menu_deny_payment">Deny</string>
+    <string name="menu_view_transaction">View Payments</string>
+    <string name="check_payment">Check Payments</string>
+    <string name="check_loan">Check Loans</string>
+    <string name="apply_loan">Apply Loan</string>
+    <string name="expense_name_hint">Enter Expense Name</string>
+    <string name="expense_amount">Expense Amount</string>
+    <string name="expense_date">Expense Released Date</string>
+    <string name="expense_release_to">Expense Paid to(receiver)</string>
+    <string name="expense_description">Full Description</string>
+    <string name="new_expense_menu">New Expense</string>
+    <string name="hit_cr_amt">Credit Amount</string>
+    <string name="hit_loan_purpose">Loan Purpose(30 chars)</string>
+    <string name="ht_loan_to_day_date">Requesting Date(to Day)</string>
+    <string name="ht_loan_end_pay_date">End of Payment Date</string>
+    <string name="ht_resp_1">Responsible Member 1</string>
+    <string name="ht_resp_2">Responsible Member 2</string>
+    <string name="agree_terms">I ensure that, This loan will be paid on time</string>
+    <string name="ht_requist">Send Request</string>
+    <string name="h2g_fml">We are Family, we help each other</string>
+    <string name="ht_resp_3">Responsible Member 3</string>
+    <string name="title_activity_ne_expense">NewExpenseActivity</string>
+    <string name="menu_new_exp">New Expense</string>
+    <string name="menu_approve">Approve</string>
+    <string name="menu_denial">Deny</string>
+    <string name="menu_psw_reset">Reset Password</string>
 </resources>

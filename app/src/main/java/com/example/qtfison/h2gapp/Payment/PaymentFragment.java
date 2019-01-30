@@ -2,7 +2,9 @@ package com.example.qtfison.h2gapp.Payment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,12 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.qtfison.h2gapp.Classes.TextViewDatePicker;
+import com.example.qtfison.h2gapp.MyProgressiveDialog;
 import com.example.qtfison.h2gapp.R;
-import com.example.qtfison.h2gapp.members.Registration;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -36,11 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Date;
 
-import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getConvertedDate;
-import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getFormatedDate;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getUniqueId;
-import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isForYourEmailId;
-import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isUserAllowed;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isValidDate;
 
 public class PaymentFragment extends Fragment {
@@ -52,8 +49,8 @@ public class PaymentFragment extends Fragment {
     RecyclerView recyclerView;
     FirebaseDatabase database;
     DatabaseReference myRef;
-    FirebaseRecyclerAdapter<PaymentReleased, PaymentRecyclerViewHolder> adapter;
-    FirebaseRecyclerOptions<PaymentReleased> options;
+    FirebaseRecyclerAdapter<PaymentNeeded, PaymentSummaryRecycleViewHolder> adapter;
+    FirebaseRecyclerOptions<PaymentNeeded> options;
     private OnFragmentInteractionListener mListener;
 
     public PaymentFragment() {
@@ -84,13 +81,13 @@ public class PaymentFragment extends Fragment {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
         recyclerView = view.findViewById(R.id.recycleViewP);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, true);
         mGridLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(mGridLayoutManager);
         recyclerView.setNestedScrollingEnabled(false);
         if (database == null) {
             database = FirebaseDatabase.getInstance();
-            myRef = database.getReference("payment_released");
+            myRef = database.getReference("payment_needed");
         }
         displayContent();
         myRef.addValueEventListener(new ValueEventListener() {
@@ -113,18 +110,14 @@ public class PaymentFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_payment, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_add_payment_needed:
-                showDialog();
+                Intent i=new Intent(getContext(),PaymentReleasedActivity.class);
+                startActivity(i);
+                //showDialog();
                 return true;
             case R.id.logout:
                 return true;
@@ -151,50 +144,41 @@ public class PaymentFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
     private void displayContent() {
-        final SharedPreferences sharedPref = getActivity().getSharedPreferences("preference_file_key", Context.MODE_PRIVATE);
-        options = new FirebaseRecyclerOptions.Builder<PaymentReleased>()
-                .setQuery(myRef.orderByChild("email").equalTo(sharedPref.getString(getString(R.string.pref_login_user_email), null))
-                        , PaymentReleased.class)
+        final MyProgressiveDialog progress=new MyProgressiveDialog(getActivity());
+        progress.showPregress();
+        options = new FirebaseRecyclerOptions.Builder<PaymentNeeded>()
+                .setQuery(myRef , PaymentNeeded.class)
                 .build();
-        adapter = new FirebaseRecyclerAdapter<PaymentReleased, PaymentRecyclerViewHolder>(options) {
+        progress.hideprogress();
+        adapter = new FirebaseRecyclerAdapter<PaymentNeeded, PaymentSummaryRecycleViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull final PaymentRecyclerViewHolder holder, int position, @NonNull final PaymentReleased model) {
-                if (isForYourEmailId(getActivity(), model.getEmail())) {
-                    final String selectedKey;
-                    final int newv;
-                    if (isUserAllowed(getActivity(), "Treasurer")) {
-                        newv = 1;
-                    } else {
-                        newv = 2;
-                    }
-                    selectedKey = getSnapshots().getSnapshot(position).getKey();
-                    holder.paid_on.setText(model.getPaidOn());
-                    if (model.getIsPaid() == 0) {
-                        holder.txt_paid_status.setText("X");
-                    } else if (model.getIsPaid() == 1) {
-                        holder.txt_paid_status.setText("√");
-                    } else {
-                        holder.txt_paid_status.setText("P");
-                    }
-                    holder.txt_pid.setText("" + model.getEmail());
-                    FirebaseDatabase database;
-                    DatabaseReference myDatabaseRef;
-                    database = FirebaseDatabase.getInstance();
-                    myDatabaseRef = database.getReference("payment_needed");
-                    myDatabaseRef.orderByChild("paymentNeededid").equalTo(model.getReleasedOnId())
-                            .addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                    holder.txt_Amount.setText(dataSnapshot.child("amount").getValue().toString());
-                                    holder.txt_start_date.setText(dataSnapshot.child("startDate").getValue().toString());
-                                    holder.txt_end_date.setText(dataSnapshot.child("endingDate").getValue().toString());
-                                    holder.txt_paymentType.setText(dataSnapshot.child("paymentType").getValue().toString());
-                                    holder.img_menu_popup.setOnClickListener(new View.OnClickListener() {
+            protected void onBindViewHolder(@NonNull final PaymentSummaryRecycleViewHolder holder, int position, @NonNull final PaymentNeeded model) {
+              //  final String selectedKey=getSnapshots().getSnapshot(position).getKey();
+                holder.txt_Amount.setText(""+model.getAmount());
+                holder.txt_start_date.setText(model.getStartDate());
+                holder.txt_end_date.setText(model.getEndingDate());
+                holder.txt_paymentType.setText(model.getPaymentType());
+                int paidnbr=model.getNbrPaid();
+                int unpaidnbr=model.getNbrMembers()-paidnbr;
+                TextDrawable drawable = TextDrawable.builder() .buildRound(""+unpaidnbr, Color.parseColor("#6eb4ad"));
+                TextDrawable drawable2 = TextDrawable.builder() .buildRound(""+paidnbr, Color.parseColor("#6eb4ad"));
+                long paidDone=model.getAmount()*paidnbr;
+                long paidNotDone=model.getAmount()*unpaidnbr;
+                holder.img_unpaid.setImageDrawable(drawable);
+                holder.img_paid.setImageDrawable(drawable2);
+                holder.txt_paid.setText(""+paidDone);
+                holder.txt_unpaid.setText(""+paidNotDone);
+                holder.txt_total.setText(""+model.getTotal());
+                if(unpaidnbr==0){
+                    holder.txt_paid_status.setText("√");
+                }else {
+                    holder.txt_paid_status.setText("X");
+                }
+                holder.img_menu_popup.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             PopupMenu popup = new PopupMenu(v.getContext(), v);
@@ -205,10 +189,7 @@ public class PaymentFragment extends Fragment {
                                                 public boolean onMenuItemClick(MenuItem item) {
                                                     switch (item.getItemId()) {
                                                         case R.id.menu_amount_paid:
-                                                            updateData(selectedKey, newv, getFormatedDate(new Date()));
                                                             return true;
-                                                        //case R.id.menu_remove_from_itinerary:
-                                                        //  return true;
                                                         default:
                                                             return false;
                                                     }
@@ -217,167 +198,17 @@ public class PaymentFragment extends Fragment {
                                             popup.show();
                                         }
                                     });
-                                }
-
-                                @Override
-                                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                }
-
-                                @Override
-                                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Toast.makeText(getContext(), "Error contact Fison" + databaseError.getMessage().toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
+               // progress.hideprogress();
             }
 
             @NonNull
             @Override
-            public PaymentRecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View itemView = LayoutInflater.from(getContext()).inflate(R.layout.post_payment_items, viewGroup, false);
-                return new PaymentRecyclerViewHolder(itemView);
+            public PaymentSummaryRecycleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View itemView = LayoutInflater.from(getContext()).inflate(R.layout.payment_historical_post_item, viewGroup, false);
+                return new PaymentSummaryRecycleViewHolder(itemView);
             }
         };
         adapter.startListening();
         recyclerView.setAdapter(adapter);
-    }
-
-    private void updateData(final String selectedKey, final int newV, final String PaidDate) {
-        database = FirebaseDatabase.getInstance();
-        final DatabaseReference myref = database.getReference();
-        myref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                myref.child("payment_released").child(selectedKey).child("isPaid").setValue(newV);
-                myref.child("payment_released").child(selectedKey).child("paidOn").setValue(PaidDate);
-                Toast.makeText(getContext(), "Thanks, recorded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-    }
-
-    public void showDialog() {
-        LayoutInflater li = LayoutInflater.from(getContext());
-        final View promptsView = li.inflate(R.layout.payment_dialog, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setView(promptsView);
-        alertDialogBuilder
-                .setCancelable(false)
-                .setTitle("Add New payment")
-                .setIcon(R.mipmap.ic_launcher)
-                .setPositiveButton("Create",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                EditText edtPayType = promptsView.findViewById(R.id.Pay_type);
-                                EditText edtAmount = promptsView.findViewById(R.id.edt_pay_amt);
-                                EditText edtStart = promptsView.findViewById(R.id.pay_start_date);
-                                EditText edtend = promptsView.findViewById(R.id.pay_end_date);
-                                TextViewDatePicker editTextDatePicker =  new TextViewDatePicker(edtStart.getContext(), edtStart,new Date().getTime(),getConvertedDate("12/12/2200").getTime());//without min date, max date
-                                TextViewDatePicker editTextDatePicker1 = new TextViewDatePicker(edtend.getContext(), edtend,new Date().getTime(),getConvertedDate("12/12/2200").getTime());
-                                 String paymentNeededId;
-                                 String paymentType, startDate, endingDate;
-                                 long amount;
-                                paymentNeededId = getUniqueId();
-                                boolean isValid=true;
-                                paymentType = edtPayType.getText().toString();
-                                if (paymentType.length() <= 0) {
-                                    Toast.makeText(getContext(), "Invalid Payment Type", Toast.LENGTH_SHORT).show();
-                                    edtPayType.setError("error");
-                                    isValid=false;
-                                }
-                                startDate = edtStart.getText().toString();
-                                if (isValidDate(startDate)) {
-                                    Toast.makeText(getContext(), "Opening date required", Toast.LENGTH_SHORT).show();
-                                    edtStart.setError("error");
-                                    isValid=false;
-                                }
-                                endingDate = edtend.getText().toString();
-                                if (isValidDate(endingDate)) {
-                                    Toast.makeText(getContext(), "Deadline date required", Toast.LENGTH_SHORT).show();
-                                    edtend.setError("error");
-                                    isValid=false;
-                                }
-                                amount=0;
-                                try {
-                                    amount = Long.parseLong(edtAmount.getText().toString());
-                                }catch (Exception e) {
-                                    Toast.makeText(getContext(), "Amount required", Toast.LENGTH_SHORT).show();
-                                    edtAmount.setError("error");
-                                    isValid = false;
-                                }
-
-                                if(isValid) {
-                                    PaymentNeeded paymentNeeded = new PaymentNeeded(paymentNeededId, paymentType, startDate, endingDate, amount);
-                                    addNewPayment(paymentNeeded);
-                                }
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    public void addNewPayment(final PaymentNeeded paymentNeeded) {
-        FirebaseDatabase database;
-        DatabaseReference myDatabaseRef, ref;
-        database = FirebaseDatabase.getInstance();
-        myDatabaseRef = database.getReference("payment_needed");
-        myDatabaseRef.push().setValue(paymentNeeded);
-        Toast.makeText(getContext(), "New Payment_needed Saved", Toast.LENGTH_SHORT).show();
-        myDatabaseRef = database.getReference("members");
-        myDatabaseRef.addChildEventListener(new ChildEventListener() {
-            @NonNull
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                FirebaseDatabase database;
-                DatabaseReference myDatabaseRef;
-                database = FirebaseDatabase.getInstance();
-                PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), dataSnapshot.child("email").getValue().toString(), 0, "Not yet");
-                myDatabaseRef = database.getReference("payment_released");
-                myDatabaseRef.push().setValue(paymentReleased);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Error contact Fison" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

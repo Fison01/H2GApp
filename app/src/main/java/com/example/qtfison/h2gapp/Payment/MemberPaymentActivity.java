@@ -1,7 +1,5 @@
 package com.example.qtfison.h2gapp.Payment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,9 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.qtfison.h2gapp.Classes.MyNotification;
+import com.example.qtfison.h2gapp.Configs;
 import com.example.qtfison.h2gapp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,27 +29,39 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 import static com.example.qtfison.h2gapp.Classes.MyFireBaseFuctions.updateData;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getFormatedDate;
-import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isForYourEmailId;
+import static com.example.qtfison.h2gapp.Classes.UtilFunctions.getUniqueId;
 import static com.example.qtfison.h2gapp.Classes.UtilFunctions.isUserAllowed;
+import static com.example.qtfison.h2gapp.Configs.*;
+
 
 public class MemberPaymentActivity extends AppCompatActivity {
-String  fname,email;
+    String  fname,email,noticeId;
     RecyclerView recyclerView;
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseRecyclerAdapter<PaymentReleased,PaymentRecyclerViewHolder> adapter;
     FirebaseRecyclerOptions<PaymentReleased> options;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_payment);
+        AppCenter.start(getApplication(), "ff81ef40-fb71-4217-abdd-6117c74a59ac",
+                Analytics.class, Crashes.class);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fname=getIntent().getStringExtra("fname");
         email=getIntent().getStringExtra("email");
+        noticeId=getIntent().getStringExtra("notifId");
         getSupportActionBar().setTitle("Payments : "+fname);
         recyclerView=findViewById(R.id.recycleViewP);
+        mAuth=FirebaseAuth.getInstance();
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getBaseContext(), 3, GridLayoutManager.VERTICAL, false);
         mGridLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(mGridLayoutManager);
@@ -78,7 +92,7 @@ String  fname,email;
 
                     final  String selectedKey;
                     final int newv;
-                    if(isUserAllowed(getBaseContext(),"Treasurer")){
+                    if(isUserAllowed(TREASURER,getBaseContext())){
                         newv=1;
                     }else{
                         newv=2;
@@ -93,7 +107,6 @@ String  fname,email;
                         holder.txt_paid_status.setText("P");
                     }
                     holder.txt_pid.setText(""+ model.getEmail());
-                    System.out.println("Tessss: "+ model.getEmail());
                     FirebaseDatabase database;
                     DatabaseReference myDatabaseRef;
                     database = FirebaseDatabase.getInstance();
@@ -101,8 +114,9 @@ String  fname,email;
                     myDatabaseRef.orderByChild("paymentNeededid").equalTo(model.getReleasedOnId())
                             .addChildEventListener(new ChildEventListener() {
                                 @Override
-                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                    holder.txt_Amount.setText(dataSnapshot.child("amount").getValue().toString());
+                                public void onChildAdded(@NonNull final DataSnapshot dataSnapshot, @Nullable String s) {
+                                    final long amountPaid=Long.parseLong(dataSnapshot.child("amount").getValue().toString());
+                                    holder.txt_Amount.setText(""+amountPaid);
                                     holder.txt_start_date.setText(dataSnapshot.child("startDate").getValue().toString());
                                     holder.txt_end_date.setText(dataSnapshot.child("endingDate").getValue().toString());
                                     holder.txt_paymentType.setText(dataSnapshot.child("paymentType").getValue().toString());
@@ -111,15 +125,24 @@ String  fname,email;
                                         public void onClick(View v) {
                                             PopupMenu popup = new PopupMenu(v.getContext(), v);
                                             MenuInflater inflater = popup.getMenuInflater();
-                                            inflater.inflate(R.menu.payment_released_menu, popup.getMenu());
+                                            inflater.inflate(R.menu.payment_item_menu, popup.getMenu());
                                             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                                                 @Override
                                                 public boolean onMenuItemClick(MenuItem item) {
                                                     switch (item.getItemId()) {
                                                         case R.id.menu_amount_paid:
-                                                            if(isUserAllowed(getBaseContext(),"Treasurer")){
-                                                                updateData(selectedKey,newv,getFormatedDate(new Date()),getBaseContext());
-                                                                return true;
+                                                            if(isUserAllowed(TREASURER,getBaseContext())||email.equalsIgnoreCase(LOGINUSEREMAIL)){
+                                                                if(model.getIsPaid()==NOT_YET || (isUserAllowed(TREASURER,getBaseContext())&& model.getIsPaid()==PANDING)) {
+                                                                    updateData(selectedKey, newv, getFormatedDate(new Date()), getBaseContext(), model.getReleasedOnId(), model.getEmail(),noticeId);
+                                                                    if (!USERLOGINROLE.equalsIgnoreCase(ADMIN) && !USERLOGINROLE.equalsIgnoreCase(TREASURER)) {
+                                                                        MyNotification notice = new MyNotification(LOGINUSEREMAIL,TREASURER, "Please Approve Or Deny", Configs.NOTICE_TYPE_CONTRP, amountPaid, getFormatedDate(new Date()), model.getReleasedOnId(), getUniqueId());
+                                                                        FirebaseDatabase.getInstance().getReference("notifications").push().setValue(notice);
+                                                                    }
+                                                                    return true;
+                                                                }else {
+                                                                    Toast.makeText(getBaseContext(),"Sorry!! Already Done Previously",Toast.LENGTH_SHORT).show();
+                                                                    return true;
+                                                                }
                                                             }else{
                                                                 Toast.makeText(getBaseContext(),"Contact Treasurer",Toast.LENGTH_SHORT).show();
                                                                 return true;

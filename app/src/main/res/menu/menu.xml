@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/logout"
-        android:icon="@drawable/ic_action_add"
-        android:title="@string/title_logout_menu"
+
+    <item android:id="@+id/menu_add_payment_needed"
+        android:title="@string/new_payment_needed" />
+    <item android:id="@+id/menu_expese_new"
+        android:title="@string/menu_new_exp"
         app:showAsAction="never" />
-    <item android:id="@+id/about"
-        android:icon="@drawable/ic_action_add"
-        android:title="About"
+    <item android:id="@+id/menu_apply_loan"
+        android:title="@string/apply_loan" />
+    <item android:id="@+id/menu_psw_reset"
+        android:title="@string/menu_psw_reset" />
+    <item android:id="@+id/logout"
+        android:title="@string/title_logout_menu"
         app:showAsAction="never" />
 </menu>

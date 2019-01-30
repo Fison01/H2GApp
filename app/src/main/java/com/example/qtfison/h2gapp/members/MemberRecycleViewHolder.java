@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.example.qtfison.h2gapp.R;
 
 public class MemberRecycleViewHolder extends RecyclerView.ViewHolder  {
-    TextView txt_fname,txt_lname,txt_address,txt_phone;
-    ImageView img_Id,img_issues,img_menu_popup;
+    TextView txt_fname,txt_lname,txt_address,txt_phone,txt_unpaid1,txt_unpaid2,txt_star1,txt_star2;
+    ImageView img_Id,img_menu_popup;
     ItemClickListener itemClickListener;
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -28,7 +28,10 @@ public class MemberRecycleViewHolder extends RecyclerView.ViewHolder  {
         txt_address= itemView.findViewById(R.id.txt_address);
         txt_phone=itemView.findViewById(R.id.txt_phone);
         img_Id= itemView.findViewById(R.id.img_ID);
-        img_issues= itemView.findViewById(R.id.img_issues);
+        txt_unpaid1= itemView.findViewById(R.id.txt_unpaid1);
+        txt_unpaid2= itemView.findViewById(R.id.txt_unpaid2);
+        txt_star1=itemView.findViewById(R.id.txt_star1);
+        txt_star2=itemView.findViewById(R.id.txt_star2);
         img_menu_popup=itemView.findViewById(R.id.id_popup_menu);
     }
 }
