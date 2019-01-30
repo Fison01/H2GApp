@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="55dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="-2dp"
+    android:paddingBottom="5dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:padding="0dp">
+
             <ImageButton
                 android:id="@+id/id_popup_menu"
                 android:layout_width="wrap_content"
@@ -19,17 +27,6 @@
                 android:layout_alignParentRight="true"
                 android:background="@null"
                 android:src="@drawable/ic_more_vert_black_24dp" />
-
-            <ImageView
-                android:id="@+id/img_issues"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignTop="@+id/img_ID"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="right"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="30dp"
-                android:src="@android:drawable/btn_star_big_on" />
 
             <ImageView
                 android:id="@+id/img_ID"
@@ -73,13 +70,42 @@
                 android:id="@+id/txt_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/txt_address"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
                 android:layout_marginTop="23dp"
-                android:layout_marginEnd="49dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="2dp"
                 android:text="0788859882"
                 android:textSize="8sp" />
+
+            <TextView
+                android:id="@+id/txt_unpaid1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@+id/txt_fname"
+                android:fontFamily="serif"
+                android:text="P Issues"
+                android:textSize="6sp"
+                android:textStyle="italic"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/txt_unpaid2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@+id/txt_fname"
+                android:fontFamily="serif"
+                android:text="L Issues"
+                android:textSize="6sp"
+                android:textStyle="italic"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/txt_address"
@@ -87,12 +113,38 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="52dp"
                 android:fontFamily="serif-monospace"
+                android:maxLength="40"
                 android:text="Kimironko- under Regina Pacis"
+                android:textAlignment="textEnd"
                 android:textSize="10sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_star1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/txt_unpaid1"
+                android:text="*"
+                android:textColor="@color/background_color"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/txt_star2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@+id/txt_unpaid2"
+                android:text="*"
+                android:textColor="@color/background_color"
+                android:visibility="invisible" />
 
         </RelativeLayout>
 
