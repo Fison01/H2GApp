@@ -6,18 +6,17 @@ public class PaymentReleased {
     private String email;
     private int isPaid;
     private String paidOn;
+    private String imageReciept;
     public PaymentReleased() {
     }
 
-    public PaymentReleased( String releasedOnId, String email, int isPaid, String paidOn) {
+    public PaymentReleased( String releasedOnId, String email, int isPaid, String paidOn,String imageReciept) {
         this.releasedOnId = releasedOnId;
         this.email = email;
         this.isPaid = isPaid;
         this.paidOn = paidOn;
+        this.imageReciept=imageReciept;
     }
-
-
-
 
 
     public String getReleasedOnId() {
@@ -50,5 +49,13 @@ public class PaymentReleased {
 
     public void setPaidOn(String paidOn) {
         this.paidOn = paidOn;
+    }
+
+    public String getImageReciept() {
+        return imageReciept;
+    }
+
+    public void setImageReciept(String imageReciept) {
+        this.imageReciept = imageReciept;
     }
 }

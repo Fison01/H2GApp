@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MyFireBaseFuctions {
    static FirebaseDatabase database;
@@ -34,11 +35,9 @@ public class MyFireBaseFuctions {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 myref.child("payment_released").child(selectedKey).child("isPaid").setValue(newV);
                 myref.child("payment_released").child(selectedKey).child("paidOn").setValue(PaidDate);
-                if(newV==Configs.APPROVED || newV==Configs.DENIED){
-                    System.out.println("11111k");
-                    EmergencyDoneRemoveNotice(noticeId);
-                }
                 updateDataPayment(paymentId,context);
+                if(newV==1)
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("Approval");
                 Toast.makeText(context,"Thanks, recorded",Toast.LENGTH_SHORT).show();
             }
             @Override
@@ -59,7 +58,6 @@ public class MyFireBaseFuctions {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         int a=Integer.parseInt(dataSnapshot.child("nbrPaid").getValue().toString())+1;
                         myref.child("payment_needed").child(dataSnapshot.getKey()).child("nbrPaid").setValue(a);
-                        Toast.makeText(context,"You are "+a+" Payer",Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

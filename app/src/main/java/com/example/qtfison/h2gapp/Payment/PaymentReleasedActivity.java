@@ -163,7 +163,7 @@ public class PaymentReleasedActivity extends AppCompatActivity {
                 FirebaseDatabase database;
                 DatabaseReference myDatabaseRef;
                 database = FirebaseDatabase.getInstance();
-                PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), dataSnapshot.child("email").getValue().toString(), 0, "Not yet");
+                PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), dataSnapshot.child("email").getValue().toString(), 0, "Not yet","");
                 myDatabaseRef = database.getReference("payment_released");
                 myDatabaseRef.push().setValue(paymentReleased);
                 //increaseIssues(dataSnapshot.child("email").getValue().toString(),"members","paymentIssues");

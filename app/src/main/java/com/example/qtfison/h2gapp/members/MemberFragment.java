@@ -49,11 +49,6 @@ import static com.example.qtfison.h2gapp.Configs.USERLOGINROLE;
 
 public class MemberFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-  //  MyProgressiveDialog progress;
-    private String mParam1;
-    private String mParam2;
     TextView txtUser,txtRole,tvTotMembers;
     RecyclerView recyclerView;
     private OnFragmentInteractionListener mListener;
@@ -65,27 +60,17 @@ public class MemberFragment extends Fragment {
     }
     public static MemberFragment newInstance(String param1, String param2) {
         MemberFragment fragment = new MemberFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
     }
 @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View view=inflater.inflate(R.layout.fragment_member, container, false);
- //   progress=new MyProgressiveDialog(getActivity());
         recyclerView=view.findViewById(R.id.recycleView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -162,7 +147,6 @@ public class MemberFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
     private void displayComment() {
-      //  progress.showPregress();
         options=new FirebaseRecyclerOptions.Builder<Member>()
                 .setQuery(myRef,Member.class)
                 .build();
@@ -179,8 +163,6 @@ public class MemberFragment extends Fragment {
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                if( !dataSnapshot.child("isPaid").getValue().toString().equalsIgnoreCase("1")){
-                                   holder.txt_star1.setVisibility(View.VISIBLE);
-                                   holder.txt_star2.setVisibility(View.VISIBLE);
                                    return;
                                 }
                             }
@@ -211,7 +193,6 @@ public class MemberFragment extends Fragment {
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                 if(!dataSnapshot.child("isFullpaid").getValue().toString().equalsIgnoreCase("1")){
                                     a =a+1;
-                                   // holder.img_issues2.setImageDrawable(TextDrawable.builder().buildRound(""+a, Color.RED));
                                 }
                             }
 
@@ -238,7 +219,7 @@ public class MemberFragment extends Fragment {
                         holder.txt_fname.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //Toast.makeText(getContext(),"clicked on "+model.getfName(),Toast.LENGTH_SHORT).show();
+
                             }
                         });
                         holder.img_menu_popup.setOnClickListener(new View.OnClickListener() {
@@ -263,7 +244,6 @@ public class MemberFragment extends Fragment {
                                                 startActivity1(MemberPaymentActivity.class,model);
                                                 return true;
                                             case R.id.menu_check_loan:
-                                                //startActivity1(LoanActivity.class,model);
                                                 Toast.makeText(getContext(),"Under Developement",Toast.LENGTH_SHORT).show();
                                                 return true;
                                             default:
@@ -274,8 +254,6 @@ public class MemberFragment extends Fragment {
                                 popup.show();
                             }
                         });
-
-                       // progress.hideprogress();
                     }
                     @NonNull
                     @Override
@@ -293,7 +271,6 @@ public class MemberFragment extends Fragment {
         super.onPause();
         if(getActivity() != null){
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-          //  progress.hideprogress();
         }
     }
 
@@ -372,11 +349,10 @@ public class MemberFragment extends Fragment {
         myDatabaseRef = database.getReference("payment_needed");
         myDatabaseRef.push().setValue(paymentNeeded);
         Toast.makeText(getContext(), "Amount charged to " + fName, Toast.LENGTH_SHORT).show();
-        PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), email, 0, "Not yet");
+        PaymentReleased paymentReleased = new PaymentReleased(paymentNeeded.getPaymentNeededid(), email, 0, "Not yet","");
         myDatabaseRef = database.getReference("payment_released");
         myDatabaseRef.push().setValue(paymentReleased);
         //increaseIssues(email,"members","paymentIssues");
-      //  progress.hideprogress();
     }
     public String getUniqueId() {
         return  UUID.randomUUID().toString().replace("-", "");

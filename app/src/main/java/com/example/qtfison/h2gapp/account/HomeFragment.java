@@ -1,6 +1,7 @@
 package com.example.qtfison.h2gapp.account;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +28,11 @@ import android.widget.Toast;
 
 import com.example.qtfison.h2gapp.Classes.MyNotification;
 import com.example.qtfison.h2gapp.Configs;
+import com.example.qtfison.h2gapp.Payment.PaymentNeeded;
 import com.example.qtfison.h2gapp.Payment.PaymentRecyclerViewHolder;
 import com.example.qtfison.h2gapp.Payment.PaymentReleased;
 import com.example.qtfison.h2gapp.R;
+import com.example.qtfison.h2gapp.uploading.UploadImageActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,10 +65,11 @@ public class HomeFragment extends Fragment {
     FirebaseRecyclerAdapter<PaymentReleased,PaymentRecyclerViewHolder> adapter;
     FirebaseRecyclerOptions<PaymentReleased> options;
     FirebaseAuth mAuth;
-    ProgressBar progressBar;
-    Handler handler;
+    ProgressBar progressBar,progressBar2;
+    Handler handler,handler2;
     String email;
-    TextView txtUser,txtRole,tvTotMembers;
+    TextView txtUser,txtRole,txtTotP,txtCountP,txtDoneP,txtUnDoneP;
+    long myTotalP,countPaid,sumPaid,countUnpaid,sumUnpaid;
     public HomeFragment() {
 
     }
@@ -81,6 +85,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
        View view= inflater.inflate(R.layout.activity_member_payment, container, false);
         progressBar = view.findViewById(R.id.progress_bar);
+        progressBar2 = view.findViewById(R.id.progressBar2);
         recyclerView=view.findViewById(R.id.recycleViewP);
         mAuth= FirebaseAuth.getInstance();
         LinearLayoutManager mGridLayoutManager = new LinearLayoutManager(getContext(), GridLayoutManager.VERTICAL, false);
@@ -93,9 +98,14 @@ public class HomeFragment extends Fragment {
         }
         txtUser=view.findViewById(R.id.txt_user);
         txtRole=view.findViewById(R.id.txt_role);
+
         if(LOGINUSEREMAIL!=null)
             txtUser.setText(LOGINUSEREMAIL.split("@")[0]);
         txtRole.setText("@"+USERLOGINROLE);
+        txtTotP=view.findViewById(R.id.txt_total_p);
+        txtCountP=view.findViewById(R.id.txt_payment_count);
+        txtDoneP=view.findViewById(R.id.txt_total_pdonep);
+        txtUnDoneP=view.findViewById(R.id.txt_total_unpaidP);
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -106,6 +116,22 @@ public class HomeFragment extends Fragment {
                         break;
                     case 2:
                         progressBar.setVisibility(View.GONE);
+                        handler.removeCallbacksAndMessages(null);
+                        break;
+                }
+            }
+        };
+        handler2=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch(msg.what){
+                    case 1:
+                        progressBar2.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        progressBar2.setVisibility(View.GONE);
+                        handler2.removeCallbacksAndMessages(null);
                         break;
                 }
             }
@@ -128,6 +154,7 @@ public class HomeFragment extends Fragment {
         });
 
         displayContent();
+        getMemberTotalPayment();
         return  view;
     }
     public void onButtonPressed(Uri uri) {
@@ -179,14 +206,19 @@ public class HomeFragment extends Fragment {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         holder.paid_status.setImageDrawable(getActivity().getDrawable(R.drawable.ic_stat_name));
                     }
-                    //holder.txt_paid_status.setText("X");
+
                 } else if(model.getIsPaid() == 1) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         holder.paid_status.setImageDrawable(getActivity().getDrawable(R.drawable.ic_done_all_black_24dp));
+                        holder.txtRounded1.setBackground(getActivity().getDrawable(R.drawable.rounded_corn0));
+                        holder.txtRounded2.setBackground(getActivity().getDrawable(R.drawable.rounded_corn0));
                     }
-                    //holder.txt_paid_status.setText("√");
                 }else {
-                    //holder.txt_paid_status.setText("P");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        holder.paid_status.setImageDrawable(getActivity().getDrawable(R.drawable.ic_waiting));
+                        holder.txtRounded1.setBackground(getActivity().getDrawable(R.drawable.rounded_corn0));
+                        holder.txtRounded2.setBackground(getActivity().getDrawable(R.drawable.rounded_corn0));
+                    }
                 }
                 holder.txt_pid.setText(""+ model.getEmail());
                 FirebaseDatabase database;
@@ -217,8 +249,8 @@ public class HomeFragment extends Fragment {
                                                             if(model.getIsPaid()==NOT_YET || (isUserAllowed(TREASURER,getContext())&& model.getIsPaid()==PANDING)) {
                                                                 updateData(selectedKey, newv, getFormatedDate(new Date()), getContext(), model.getReleasedOnId(), model.getEmail(),"1"/*noticeId*/);
                                                                 if (!USERLOGINROLE.equalsIgnoreCase(ADMIN) && !USERLOGINROLE.equalsIgnoreCase(TREASURER)) {
-                                                                    MyNotification notice = new MyNotification(LOGINUSEREMAIL,TREASURER, "Please Approve Or Deny", Configs.NOTICE_TYPE_CONTRP, amountPaid, getFormatedDate(new Date()), model.getReleasedOnId(), getUniqueId());
-                                                                    FirebaseDatabase.getInstance().getReference("notifications").push().setValue(notice);
+                                                                   // MyNotification notice = new MyNotification(LOGINUSEREMAIL,TREASURER, "Please Approve Or Deny", Configs.NOTICE_TYPE_CONTRP, amountPaid, getFormatedDate(new Date()), model.getReleasedOnId(), getUniqueId());
+                                                                   // FirebaseDatabase.getInstance().getReference("notifications").push().setValue(notice);
                                                                 }
                                                                 return true;
                                                             }else {
@@ -235,6 +267,12 @@ public class HomeFragment extends Fragment {
                                             }
                                         });
                                         popup.show();
+                                    }
+                                });
+                                holder.img_receipt.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        startActivity(new Intent(getContext(),UploadImageActivity.class));
                                     }
                                 });
                             }
@@ -268,12 +306,88 @@ public class HomeFragment extends Fragment {
                 progressBar.setVisibility(View.INVISIBLE);
                 return new PaymentRecyclerViewHolder(itemView);
             }
-
         };
         adapter.startListening();
         recyclerView. addItemDecoration(new DividerItemDecoration(getContext() ,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
+        txtTotP.setText(sumPaid+" Rwf");
 
+    }
+
+    public void getMemberTotalPayment(){
+        Message processStart2 = handler2.obtainMessage(1);
+        processStart2.sendToTarget();
+        FirebaseDatabase.getInstance().getReference("payment_released").orderByChild("email").equalTo(LOGINUSEREMAIL).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+               final PaymentReleased model=dataSnapshot.getValue(PaymentReleased.class);
+                FirebaseDatabase.getInstance().getReference("payment_needed").orderByChild("paymentNeededid").equalTo(model.getReleasedOnId()).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            PaymentNeeded paymentNeeded = dataSnapshot.getValue(PaymentNeeded.class);
+                            if (model.getIsPaid() == 0) {
+                                sumUnpaid = sumUnpaid + paymentNeeded.getAmount();
+                                countUnpaid = countUnpaid + 1;
+                                //holder.txt_paid_status.setText("X");
+                            } else if (model.getIsPaid() == 1) {
+                                sumPaid = sumPaid + paymentNeeded.getAmount();
+                                countPaid = countPaid + 1;
+                                //holder.txt_paid_status.setText("√");
+                            } else {
+                                sumUnpaid = sumUnpaid + paymentNeeded.getAmount();
+                                countUnpaid = countUnpaid + 1;
+                                //holder.txt_paid_status.setText("P");
+                            }
+                        txtTotP.setText(sumPaid+sumUnpaid+" Rwf");
+                        txtCountP.setText(countPaid+" out "+(countUnpaid+countPaid)+"  Your payment(s) done, "+countUnpaid+" remaining");
+                        txtDoneP.setText(sumPaid+" Rwf ");
+                        txtUnDoneP.setText(sumUnpaid+" Rwf ");
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                Message processStart2 = handler2.obtainMessage(2);
+                processStart2.sendToTarget();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

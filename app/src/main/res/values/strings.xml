@@ -3,7 +3,7 @@
     <string name="title_home">H2G Family</string>
     <string name="title_members">Members</string>
     <string name="title_Payment">Payments</string>
-    <string name="title_meeting">Expenses</string>
+    <string name="title_home_nav">My Activities</string>
     <string name="title_account">Account</string>
     <string name="title_add_menu">Add a member</string>
     <string name="title_logout_menu">Logout</string>
